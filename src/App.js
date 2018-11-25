@@ -90,6 +90,14 @@ class App extends Component {
           <section className='display-item'>
             <div className='wrapper'>
               <ul>
+	              {this.state.items.map( (item) => {
+	              	   return(
+	              	   	<li key={item.id}>
+			                  <h3>{item.title}</h3>
+			                  <p>{item.name}</p>
+		                  </li>
+	                  )
+	              })}
               </ul>
             </div>
           </section>

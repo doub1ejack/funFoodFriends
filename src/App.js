@@ -58,6 +58,11 @@ class App extends Component {
      });
   }
 
+  handleDelete(itemId){
+  	   const itemToDelete = firebase.database().ref(`/items/${itemId}`);
+  	   itemToDelete.remove();
+  }
+
   render() {
     return (
       <div className='app'>
@@ -93,7 +98,10 @@ class App extends Component {
 	              {this.state.items.map( (item) => {
 	              	   return(
 	              	   	<li key={item.id}>
-			                  <h3>{item.title}</h3>
+			                  <h3>
+				                  {item.title}
+				                  <span onClick={() => this.handleDelete(item.id)} className="remove-item pull-right">x</span>
+			                  </h3>
 			                  <p>{item.name}</p>
 		                  </li>
 	                  )

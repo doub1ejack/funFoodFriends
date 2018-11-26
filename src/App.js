@@ -44,7 +44,7 @@ class App extends Component {
 		const itemsRef = firebase.database().ref("items");
 		itemsRef.push({
 			title: this.state.currentItem,
-			user: this.state.username
+			user: this.state.user.displayName || this.state.user.email
 		});
 
 		// clear item state
@@ -117,49 +117,58 @@ class App extends Component {
 					</div>
 				</header>
 
-				{/* Input form */}
-				<div className='container'>
-					<section className='add-item'>
-						<form onSubmit={this.handleSubmit}>
-							<input type="text"
-							       name="username"
-							       placeholder="What's your name?"
-							       onChange={this.handleChange}
-							       value={this.state.username}
-							/>
+				{this.state.user ?
+					<div className='container'>
 
-							<input type="text"
-							       name="currentItem"
-							       placeholder="What are you bringing?"
-							       onChange={this.handleChange}
-							       value={this.state.currentItem}
-							/>
+						{/* Input form */}
+						<section className='add-item'>
+							<form onSubmit={this.handleSubmit}>
+								<input type="text"
+								       disabled="disabled"
+								       name="username"
+								       placeholder="What's your name?"
+								       value={this.state.user.displayName || this.state.user.email}
+								/>
 
-							<button>Add Item</button>
-						</form>
-					</section>
+								<input type="text"
+								       name="currentItem"
+								       placeholder="What are you bringing?"
+								       onChange={this.handleChange}
+								       value={this.state.currentItem}
+								/>
 
-					{/* Item Wrapper */}
-					<section className='display-item'>
-						<div className='wrapper'>
-							<ul>
-								{this.state.items.map((item) => {
-									return (
-										<li key={item.id}>
-											<h3>
-												{item.title}
-												<span onClick={() => this.handleDelete(item.id)}
-												      className="remove-item pull-right">x</span>
-											</h3>
-											<p>{item.name}</p>
-										</li>
-									)
-								})}
-							</ul>
-						</div>
-					</section>
+								<button>Add Item</button>
+							</form>
+						</section>
 
-				</div>
+						{/* Item Wrapper */}
+						<section className='display-item'>
+							<div className='wrapper'>
+								<ul>
+									{this.state.items.map((item) => {
+										return (
+											<li key={item.id}>
+												<h3>
+													{item.title}
+													<span onClick={() => this.handleDelete(item.id)}
+													      className="remove-item pull-right">x</span>
+												</h3>
+												<p>{item.name}</p>
+											</li>
+										)
+									})}
+								</ul>
+							</div>
+						</section>
+
+					</div>
+
+					:
+
+					<div className='container'>
+						Sorry, you gotta log in first.
+					</div>
+				}
 			</div>
 		);
 	}

@@ -147,15 +147,10 @@ button {
     padding: 10px 6px;
 }
 
-.user-profile {
-    position: fixed;
-    bottom: 20px;
-    right: 40px;
-    width: 100px;
-    height: 100px;
-}
-
 .user-profile img {
     border-radius: 50%;
     max-width: 100%;
+    max-height: 40px;
+    margin-right: 20px;
+    vertical-align: middle;
 }

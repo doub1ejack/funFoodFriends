@@ -101,16 +101,23 @@ class App extends Component {
 	render() {
 		return (
 			<div className='app'>
+
+				{/* App header */}
 				<header>
 					<div className='wrapper'>
 						<h1>Fun Food Friends</h1>
 						{this.state.user ?
-							<button onClick={this.logout}>Log Out</button>
+							<div className='user-profile'>
+								<img src={this.state.user.photoURL} />
+								<button onClick={this.logout}>Log Out</button>
+							</div>
 							:
-							<button onClick={this.login}>Log In</button>
+							<img src={'./images/btn_google_signin_light_normal_web.png'} onClick={this.login} className="btn"/>
 						}
 					</div>
 				</header>
+
+				{/* Input form */}
 				<div className='container'>
 					<section className='add-item'>
 						<form onSubmit={this.handleSubmit}>
@@ -131,6 +138,8 @@ class App extends Component {
 							<button>Add Item</button>
 						</form>
 					</section>
+
+					{/* Item Wrapper */}
 					<section className='display-item'>
 						<div className='wrapper'>
 							<ul>
@@ -149,6 +158,7 @@ class App extends Component {
 							</ul>
 						</div>
 					</section>
+
 				</div>
 			</div>
 		);

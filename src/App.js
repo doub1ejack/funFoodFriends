@@ -36,6 +36,13 @@ class App extends Component {
 				items: newState
 			});
 		});
+
+		// observer for user auth changes
+		auth.onAuthStateChanged( (user) => {
+			if(user){
+				this.setState({user});
+			}
+		});
 	}
 
 	handleChange(e) {

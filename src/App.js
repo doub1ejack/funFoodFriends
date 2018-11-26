@@ -26,8 +26,11 @@ class App extends Component {
 		itemsRef.on('value', (snapshot) => { this.setItems(snapshot) });
 
 		// observer for user auth changes
+		// NOTE: if I don't set the itemsRef.on() function here again, then when logging in/out
+		// the items don't update without a full page refresh.  Not sure why...
 		auth.onAuthStateChanged( (user) => {
 			if(user){ this.setState({user}); }
+			itemsRef.on('value', (snapshot) => { this.setItems(snapshot) });
 		});
 	}
 

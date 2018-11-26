@@ -47,12 +47,13 @@ class App extends Component {
 		const itemsRef = firebase.database().ref("items");
 		itemsRef.push({
 			title: this.state.currentItem,
-			user: this.state.user.displayName || this.state.user.email
+			user: this.state.user.displayName || this.state.user.email,
+			providerId: this.state.user.providerData[0].providerId,
+			providerUid: this.state.user.providerData[0].uid
 		});
 
-		// clear item state
+		// clear form state
 		this.setState({
-			username: '',
 			currentItem: ''
 		});
 	}
@@ -74,7 +75,8 @@ class App extends Component {
 				newState.push({
 					id: item,
 					title: items[item].title,
-					name: items[item].user
+					name: items[item].user,
+					providerUid: items[item].providerUid
 				});
 			}
 			this.setState({
@@ -149,12 +151,17 @@ class App extends Component {
 							<div className='wrapper'>
 								<ul>
 									{this.state.items.map((item) => {
+										console.log(JSON.stringify(item));
 										return (
 											<li key={item.id}>
 												<h3>
 													{item.title}
-													<span onClick={() => this.handleDelete(item.id)}
-													      className="remove-item pull-right">x</span>
+													{ (item.providerUid === this.state.user.providerData[0].uid) ?
+														<span onClick={() => this.handleDelete(item.id)}
+														      className="remove-item pull-right">x</span>
+														:
+														<div/>
+													}
 												</h3>
 												<p>{item.name}</p>
 											</li>

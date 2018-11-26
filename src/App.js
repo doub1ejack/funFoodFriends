@@ -14,6 +14,8 @@ class App extends Component {
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.logout = this.logout.bind(this);
+		this.login = this.login.bind(this);
 	}
 
 	componentDidMount() {
@@ -64,13 +66,30 @@ class App extends Component {
 		itemToDelete.remove();
 	}
 
+	logout(){
+		auth.signOut().then( () => {
+			this.setState({user: null})
+		});
+	}
+
+	login(){
+		auth.signInWithPopup(provider).then( (result) => {
+			const user = result.user;
+			this.setState({ user });
+		});
+	}
+
 	render() {
 		return (
 			<div className='app'>
 				<header>
 					<div className='wrapper'>
 						<h1>Fun Food Friends</h1>
-
+						{this.state.user ?
+							<button onClick={this.logout}>Log Out</button>
+							:
+							<button onClick={this.login}>Log In</button>
+						}
 					</div>
 				</header>
 				<div className='container'>

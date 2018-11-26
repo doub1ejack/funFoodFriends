@@ -16,32 +16,18 @@ class App extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.logout = this.logout.bind(this);
 		this.login = this.login.bind(this);
+		this.setItems = this.setItems.bind(this);
 	}
 
 	componentDidMount() {
 
 		// when database changes, update the items in our state
 		const itemsRef = firebase.database().ref("items");
-		itemsRef.on('value', (snapshot) => {
-			let items = snapshot.val();
-			let newState = [];
-			for (let item in items) {
-				newState.push({
-					id: item,
-					title: items[item].title,
-					name: items[item].user
-				});
-			}
-			this.setState({
-				items: newState
-			});
-		});
+		itemsRef.on('value', (snapshot) => { this.setItems(snapshot) });
 
 		// observer for user auth changes
 		auth.onAuthStateChanged( (user) => {
-			if(user){
-				this.setState({user});
-			}
+			if(user){ this.setState({user}); }
 		});
 	}
 
@@ -73,9 +59,31 @@ class App extends Component {
 		itemToDelete.remove();
 	}
 
+	// sets the items in state
+	setItems(snapshot){
+		if(!snapshot) {
+			this.setState({items: []});
+		}
+		else {
+			let items = snapshot.val();
+			let newState = [];
+			for (let item in items) {
+				newState.push({
+					id: item,
+					title: items[item].title,
+					name: items[item].user
+				});
+			}
+			this.setState({
+				items: newState
+			});
+		}
+	}
+
 	logout(){
 		auth.signOut().then( () => {
-			this.setState({user: null})
+			this.setState({user: null});
+			this.setItems(null);
 		});
 	}
 
@@ -83,6 +91,10 @@ class App extends Component {
 		auth.signInWithPopup(provider).then( (result) => {
 			const user = result.user;
 			this.setState({ user });
+
+			// refresh items
+			const itemsRef = firebase.database().ref("items");
+			itemsRef.once("value", function(data) { this.setItems(data) }.bind(this) );
 		});
 	}
 
